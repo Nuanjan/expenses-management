@@ -1,0 +1,46 @@
+/* ------------Shared Rules-------------- */
+:root {
+  --mint: #22b7b4;
+  --iron: #e8e8e9;
+  --jaffa: #f2774d;
+  --darkblue: #0b2947;
+  --alizarin-crimson: #eb2d1f;
+  --rajah: #fabd6b;
+  --my-pink: #d49d93;
+  --cement: #8e6c60;
+  --dorado: #5f5651;
+}
+.margin-left {
+  margin-left: 1rem;
+}
+.text-darkblue {
+  color: var(--darkblue);
+}
+.text-strong {
+  font-weight: 600;
+}
+.btn-mint {
+  color: white;
+  background-color: var(--mint);
+  border: none;
+  border-radius: 15px;
+  padding: 0.5rem 1rem;
+}
+/* --------------Log In Rules--------------- */
+.register-link {
+}
+
+.login-container {
+  margin-top: 5rem;
+  position: relative;
+  border: solid 2px var(--iron);
+  border-radius: 20px;
+  padding: 1rem 3rem;
+  min-width: 300px;
+}
+.image-login {
+  width: 150%;
+  position: relative;
+  bottom: -25px;
+  left: -25%;
+}

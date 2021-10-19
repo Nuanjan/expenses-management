@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='/css/style.css') }}"
+    />
+    <title>Expenses Management</title>
+  </head>
+  <body>
+    {% block content %}
+    <div class="w-25 mx-auto login-container">
+      <h2 class="text-darkblue">Login</h2>
+      <form action="/login" method="post">
+        {% with messages = get_flashed_messages() %}{% if messages %}
+        <div class="alert alert-danger">
+          {% for message in messages %}
+          <p>{{message}}</p>
+          {% endfor %}
+        </div>
+        {% endif %} {% endwith %}
+        <input type="hidden" name="which_form" value="login" />
+        <div class="form-group">
+          <label class="text-white" for="e_mail">Email:</label>
+          <input
+            type="text"
+            name="e_mail"
+            class="form-control"
+            id="e_mail"
+            aria-describedby="emailHelp"
+            placeholder="Enter Email"
+          />
+        </div>
+        <div class="form-group">
+          <label class="text-white" for="password">Password:</label>
+          <input
+            type="text"
+            name="password"
+            class="form-control"
+            id="password"
+            aria-describedby="passwordHelp"
+            placeholder="Password"
+          />
+        </div>
+        <button type="submit" class="btn-mint">Login</button>
+        <span class="margin-left text-darkblue">or</span
+        ><a class="margin-left text-darkblue text-strong" href="/registration"
+          >Register</a
+        >
+      </form>
+      <img
+        src="{{ url_for('static', filename='/img/expenses-balance.png') }}"
+        class="image-login"
+        alt="expenses-management"
+      />
+    </div>
+    {% endblock %}
+  </body>
+</html>
