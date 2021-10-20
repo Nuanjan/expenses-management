@@ -1,0 +1,50 @@
+{% extends 'user_dashboard.html'%}{%block board%}
+<div class="margin-top mx-auto w-25">
+  <h3 class="text-white text-center bg-dark-blue mb-0 p-1">YOUR BUDGET</h3>
+  <div
+    class="
+      d-flex
+      flex-column
+      bg-orange
+      add-budget-container
+      align-items-center
+      pl-3
+      pr-3
+      justify-content-center
+    "
+  >
+    <form
+      action="/add_expense"
+      method="post"
+      class="d-flex flex-column align-items-center"
+    >
+      {% with messages = get_flashed_messages() %}{% if messages %}
+      <div class="alert alert-danger">
+        {% for message in messages %}
+        <p>{{message}}</p>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %}
+      <div class="d-flex">
+        <label class="text-white" for="amount">Expense: </label>
+        <input class="" type="text" name="amount" id="amount" />
+      </div>
+      <div class="d-flex">
+        <label class="text-white" for="amount">Date: </label>
+        <input class="" type="date" name="date" id="date" />
+      </div>
+      <div class="d-flex">
+        <label class="text-white" for="amount">Amount: </label>
+        <input class="" type="number" name="amount" id="amount" />
+      </div>
+      <div class="d-flex">
+        <label class="text-white" for="category">Category: </label>
+        <input class="" type="sel" name="amount" id="amount" />
+      </div>
+      <button type="submit" class="btn bg-cement mt-5 w-25 text-center">
+        ADD
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

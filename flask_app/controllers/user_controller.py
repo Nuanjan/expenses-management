@@ -1,6 +1,7 @@
 from flask.helpers import flash
 from flask_app import app
 from flask import redirect, render_template, session, request, url_for
+from flask_app.models.buget import Budget
 from flask_app.models.user import User
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app)     # we are creating an object called bcrypt,
@@ -8,6 +9,7 @@ bcrypt = Bcrypt(app)     # we are creating an object called bcrypt,
 
 @app.route('/')
 def index():
+    data = {'budget': 1, 'expenses': 0.1}
     return render_template('index.html')
 
 
@@ -28,9 +30,10 @@ def register_user():
         "email": request.form['e_mail'],
         "password": hashed_password
     }
-    if not User.add_user(data):
+    addUser = User.add_user(data)
+    if not addUser:
         return redirect('/registration')
-    session['user_id'] = User.add_user(data)
+    session['user_id'] = addUser
     return redirect('/user_dashboard')
 
 
@@ -62,7 +65,13 @@ def user_dashboard():
         }
         one_user = User.get_user_by_id(data)
         print(one_user, " this is one user")
-        return render_template('user_dashboard.html', one_user=one_user)
+        one_budget = Budget.get_budget_with_user_id(data)
+        if not one_budget:
+            budget = 0
+        else:
+            budget = one_budget
+        print("one budget", budget)
+        return render_template('user_dashboard.html', one_user=one_user, budget=budget)
     else:
         return redirect('/forbidden')
 
