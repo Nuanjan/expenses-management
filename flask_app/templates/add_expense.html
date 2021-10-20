@@ -1,22 +1,20 @@
 {% extends 'user_dashboard.html'%}{%block board%}
-<div class="margin-top mx-auto w-25">
-  <h3 class="text-white text-center bg-dark-blue mb-0 p-1">YOUR BUDGET</h3>
+<div class="margin-top mx-auto w-50">
+  <h3 class="text-white text-center bg-dark-blue mb-0 p-1">ADD EXPENSE</h3>
   <div
     class="
       d-flex
       flex-column
-      bg-orange
-      add-budget-container
+      bg-rajah
       align-items-center
-      pl-3
-      pr-3
+      p-3
       justify-content-center
     "
   >
     <form
       action="/add_expense"
       method="post"
-      class="d-flex flex-column align-items-center"
+      class="d-flex flex-column align-items-between"
     >
       {% with messages = get_flashed_messages() %}{% if messages %}
       <div class="alert alert-danger">
@@ -25,25 +23,69 @@
         {% endfor %}
       </div>
       {% endif %} {% endwith %}
-      <div class="d-flex">
-        <label class="text-white" for="amount">Expense: </label>
-        <input class="" type="text" name="amount" id="amount" />
+      <div class="d-flex mb-3">
+        <div class="w-25">
+          <label for="amount">Expense: </label>
+        </div>
+        <input
+          class="w-75 input-dark-brown"
+          type="text"
+          name="amount"
+          id="amount"
+        />
       </div>
-      <div class="d-flex">
-        <label class="text-white" for="amount">Date: </label>
-        <input class="" type="date" name="date" id="date" />
+      <div class="d-flex mb-3">
+        <div class="w-25">
+          <label for="amount">Date: </label>
+        </div>
+        <input
+          class="w-75 input-dark-brown"
+          type="date"
+          name="date"
+          id="date"
+        />
       </div>
-      <div class="d-flex">
-        <label class="text-white" for="amount">Amount: </label>
-        <input class="" type="number" name="amount" id="amount" />
+      <div class="d-flex mb-3">
+        <div class="w-25">
+          <label for="dojo_location">Category:</label>
+        </div>
+        <select
+          name="cate"
+          class="custom-select w-75 input-dark-brown"
+          id="dojo_location"
+        >
+          <option hidden>-- Select a Category--</option>
+          <option value="Utilities">Utilities</option>
+          <option value="Personal/Miscellaneous">Personal/Miscellaneous</option>
+          <option value="Food/Drink">Food/Drink</option>
+          <option value="Transportation">Transportation</option>
+          <option value="HouseholdItems/Supplies">
+            Household Items/Supplies
+          </option>
+          <option value="Insurance">Insurance</option>
+          <option value="Clothing">Clothing</option>
+          <option value="Medical/Healthcare">Medical/Healthcare</option>
+          <option value="Education">Education</option>
+          <option value="Gift/Donations">Gift/Donations</option>
+          <option value="Entertainment">Entertainment</option>
+        </select>
       </div>
-      <div class="d-flex">
-        <label class="text-white" for="category">Category: </label>
-        <input class="" type="sel" name="amount" id="amount" />
+      <div class="d-flex mb=3">
+        <div class="w-25">
+          <label for="amount">Amount: </label>
+        </div>
+        <input
+          class="w-75 input-dark-brown"
+          type="number"
+          name="amount"
+          id="amount"
+        />
       </div>
-      <button type="submit" class="btn bg-cement mt-5 w-25 text-center">
-        ADD
-      </button>
+      <div class="text-center">
+        <button type="submit" class="btn bg-dark-blue mt-5 w-25 text-white">
+          ADD
+        </button>
+      </div>
     </form>
   </div>
 </div>

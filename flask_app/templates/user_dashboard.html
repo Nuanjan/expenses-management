@@ -11,7 +11,7 @@
   </div>
   <div class="d-flex justify-content-center align-items-center">
     <h3 class="text-white">{{one_user.first_name}} {{one_user.last_name}}</h3>
-    <a class="btn-iron margin-left" href="/logout">Logout</a>
+    <a class="btn bg-iron margin-left text-darkblue" href="/logout">Logout</a>
   </div>
 </nav>
 {% block board%}
@@ -63,8 +63,8 @@
         <span>$</span>{% if budget == 0%}0 {%else %} {{budget.amount}}{% endif
         %}
       </h3>
-      <a class="square-btn bg-cement" href="/new/budget">ADD</a>
-      <a class="square-btn bg-orange" href="/edit_budget">EDIT</a>
+      <a class="square-btn bg-cement text-white" href="/new/budget">ADD</a>
+      <a class="square-btn bg-orange text-white" href="/edit_budget">EDIT</a>
     </div>
 
     <a href="/new/expense" class="d-flex align-items-center text-darkblue"
