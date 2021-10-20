@@ -1,7 +1,7 @@
 from flask.helpers import flash
 from flask_app import app
 from flask import redirect, render_template, session, request, url_for
-from flask_app.models.buget import Budget
+from flask_app.models.budget import Budget
 from flask_app.models.user import User
 from flask_app.models.expense import Expense
 from flask_bcrypt import Bcrypt
@@ -61,20 +61,19 @@ def user_dashboard():
             "id": session['user_id']
         }
         one_user = User.get_user_by_id(data)
-        one_budget = Budget.get_budget_with_user_id(data)
-        if not one_budget:
-            budget = 0
+        budget = Budget.get_budget_with_user_id(data)
+        if not budget:
+            session['budget_id'] = 0
         else:
-            budget = one_budget
-        all_expenses = Expense.all_expenses_with_owner(data)
-        expenses = 0
-        if not all_expenses:
-            expenses = 0
+            session['budget_id'] = budget.id
+        all_expenses = Expense.all_expenses_with_owner_and_budget(data)
+        summary = Expense.get_budget_and_expense(data)
+        total_expenses = 0.00
+        if not summary:
+            total_expenses = 0.00
         else:
-            expenses = all_expenses
-            print(expenses)
-
-        return render_template('user_dashboard.html', one_user=one_user, budget=budget, expenses=expenses)
+            total_expenses = summary['total_expenses']/summary['budget']
+        return render_template('user_dashboard.html', one_user=one_user, budget=budget, budget_id=session['budget_id'], all_expenses=all_expenses, total_expenses=total_expenses)
     else:
         return redirect('/forbidden')
 

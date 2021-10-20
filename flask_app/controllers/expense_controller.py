@@ -4,7 +4,6 @@ from flask_app import app
 from flask_app.models.expense import Expense
 from flask_app.models.user import User
 from flask import redirect, render_template, session, request, url_for
-from flask_app.models.buget import Budget
 
 
 @app.route('/new/expense')
@@ -25,12 +24,17 @@ def add_expense():
     print("expense form data", request.form)
     if not Expense.validate_expense(request.form):
         return redirect('/new/expense')
+    if not 'budget_id' in session:
+        session['budget_id'] = 0
+    print("budget id in expenses controller ", session['budget_id'])
     data = {
         "expense": request.form['expense'],
         "date": request.form['date'],
         "amount": request.form['amount'],
         "category": request.form['category'],
-        "user_id": session['user_id']
+        "user_id": session['user_id'],
+        "budget_id": session['budget_id']
+
     }
     Expense.add_expense(data)
     return redirect('/user_dashboard')
@@ -47,7 +51,7 @@ def edit_expense(expense_id):
     data = {
         "id": expense_id
     }
-    one_expense = Expense.one_expense_with_owner(data)
+    one_expense = Expense.one_expense_with_owner_and_budget(data)
     print("one expense from db", one_expense)
     return render_template('edit_expense.html', one_user=one_user, one_expense=one_expense)
 
@@ -56,19 +60,22 @@ def edit_expense(expense_id):
 def edit_exit_expense(expense_id):
     if not Expense.validate_expense(request.form):
         return redirect(f'/edit_expense/{expense_id}')
+    print("budget id in expenses controller ", session['budget_id'])
     data = {
         "id": expense_id,
         "expense": request.form['expense'],
         "date": request.form['date'],
         "amount": request.form['amount'],
         "category": request.form['category'],
-        "user_id": session['user_id']
+        "user_id": session['user_id'],
+        "budget_id": session['budget_id']
+
     }
     Expense.edit_exit_expense(data)
     return redirect('/user_dashboard')
 
 
-@app.route('/delete_expense/<int:expense.id>')
+@app.route('/delete_expense/<int:expense_id>')
 def delete_expense(expense_id):
     data = {
         "id": expense_id

@@ -19,46 +19,6 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='/css/style.css') }}"
     />
-    <script
-      type="text/javascript"
-      src="https://www.gstatic.com/charts/loader.js"
-    ></script>
-    <script type="text/javascript">
-      google.charts.load("current", { packages: ["corechart"] });
-      google.charts.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ["Element", "expenses", "budget", { role: "annotation" }],
-          ["expenses", 0.1, 1, "#22b7b4"],
-        ]);
-
-        var view = new google.visualization.DataView(data);
-        view.setColumns([0, 1, 2]);
-        var options = {
-          title: "Total Expenses VS Budget",
-          isStacked: true,
-          height: 150,
-          bar: { groupWidth: "40%" },
-          legend: { position: "relative" },
-          hAxis: {
-            format: "#%",
-            minValue: 0,
-            viewWindow: { max: 1 },
-          },
-          backgroundColor: {
-            fill: "#e8e8e9",
-          },
-          series: {
-            0: { color: "#eb2d1f" },
-            1: { color: "#22b7b4" },
-          },
-        };
-        var chart = new google.visualization.BarChart(
-          document.getElementById("barchart_values")
-        );
-        chart.draw(view, options);
-      }
-    </script>
     <title>Expenses Management</title>
   </head>
   <body>

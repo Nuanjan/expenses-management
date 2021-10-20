@@ -2,6 +2,9 @@
 from flask_app.config.mysqlconnection import connectToMySQL
 # model the class after the friend table from our database
 from flask import flash
+from flask_app.models import budget
+from flask_app.models import expense
+
 import re
 
 
@@ -19,6 +22,8 @@ class User:
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
         # Now we use class methods to query our database
+        self.budget = {}
+        self.expenses = []
 
     @staticmethod
     def validate_user(userFormData):
@@ -58,46 +63,11 @@ class User:
             is_valid = False
         return is_valid
 
-    # @classmethod
-    # def get_all(cls):
-    #     query = "SELECT * FROM users;"
-    #     # make sure to call the connectToMySQL function with the schema you are targeting.
-    #     results = connectToMySQL('expenses_management_schema').query_db(query)
-    #     # Create an empty list to append our instances of users
-    #     users = []
-    #     # Iterate over the db results and create instances of users with cls.
-    #     for user in results:
-    #         users.append(cls(user))
-    #     return users
-
     @classmethod
     def add_user(cls, data):
         print('data from queries: ', data)
         query = "INSERT INTO users (first_name , last_name , email ,password, created_at, updated_at ) VALUES ( %(first_name)s , %(last_name)s , %(email)s ,%(password)s, NOW() , NOW());"
         return connectToMySQL('expenses_management_schema').query_db(query, data)
-
-    # @classmethod
-    # def get_user(cls, data):
-    #     query = "SELECT * FROM users WHERE users.id = %(id)s;"
-    #     results = connectToMySQL('expenses_management_schema').query_db(query, data)
-    #     users = []
-    #     for user in results:
-    #         users.append(cls(user))
-    #     return users[0]
-
-    # @classmethod
-    # def edit_user(cls, data):
-    #     print(data, " this is data before query")
-    #     query = "UPDATE users SET first_name = %(first_name)s, last_name = %(last_name)s, email = %(email)s WHERE users.id = %(id)s"
-    #     # data is a dictionary that will be passed into the save method from server.py
-    #     # will return the id of that data that we just insert in
-
-    #     return connectToMySQL('expenses_management_schema').query_db(query, data)
-
-    # @classmethod
-    # def delete_user(cls, data):
-    #     query = "DELETE FROM users WHERE users.id = %(id)s;"
-    #     return connectToMySQL('expenses_management_schema').query_db(query, data)
 
     @classmethod
     def get_user_by_email(cls, data):
@@ -114,3 +84,4 @@ class User:
         if len(result) < 1:
             return False
         return cls(result[0])
+    

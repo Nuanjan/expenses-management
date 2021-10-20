@@ -1,86 +1,156 @@
 <!DOCTYPE html>
-{%extends 'index.html'%} {% block content %}
-<nav class="nav-bar padding-right">
-  <div>
-    <img
-      class="logo"
-      src="{{ url_for('static', filename='/img/logo.png') }}"
-      alt="logo"
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
     />
-    <a class="text-white h3" href="/user_dashboard">Expenses Management</a>
-  </div>
-  <div class="d-flex justify-content-center align-items-center">
-    <h3 class="text-white">{{one_user.first_name}} {{one_user.last_name}}</h3>
-    <a class="btn bg-iron margin-left text-darkblue" href="/logout">Logout</a>
-  </div>
-</nav>
-{% block board%}
-<header class="header">
-  <h2 class="text-center text-darkblue">YOUR OVERALL SUMMARY EXPENSES BOARD</h2>
-</header>
-<div id="barchart_values"></div>
-<div class="d-flex mt-5 p-5 justify-content-between">
-  <div class="bg-dark-blue text-white w-50 p-2">
-    <p class="text-center">Expenses List</p>
-    <table class="table text-center">
-      <thead>
-        <tr>
-          <th scope="col">Action</th>
-          <th scope="col">Expenses List</th>
-          <th scope="col">Date</th>
-          <th scope="col">Amount</th>
-          <th scope="col">category</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for expense in expenses%}
-        <tr>
-          <td scope="row">
-            <a href="/edit_expense/{{expense.id}}"
-              ><i class="fas fa-edit"></i
-            ></a>
-            <a href="/delete_expense/{{expense.id}}"
-              ><i class="fas fa-trash-alt ml-2"></i
-            ></a>
-          </td>
-          <td>{{expense.expense}}</td>
-          <td>{{expense.date}})</td>
-          <td>{{expense.amount}}</td>
-          <td>{{expense.category}}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  <div
-    class="
-      ml-3
-      w-50
-      d-flex
-      flex-column
-      justify-content-around
-      align-items-center
-      budget-container
-    "
-  >
-    <h3 class="text-dark-brown">YOUR BUDGET</h3>
-    <div class="d-flex bg-dorado">
-      <h3 class="pl-5 pr-5 text-white">
-        <span>$</span>{% if budget == 0%}0 {%else %} {{budget.amount}}{% endif
-        %}
-      </h3>
-      <a class="square-btn bg-cement text-white" href="/new/budget">ADD</a>
-      <a
-        class="square-btn bg-orange text-white"
-        href="/edit_budget/{{budget.id}}"
-        >EDIT</a
-      >
-    </div>
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.12.1/css/all.css"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='/css/style.css') }}"
+    />
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+    <script type="text/javascript">
+      google.charts.load("current", { packages: ["corechart"] });
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ["Element", "expenses", "budget", { role: "annotation" }],
+          ["expenses", {{total_expenses}}, 1, "#22b7b4"],
+        ]);
 
-    <a href="/new/expense" class="d-flex align-items-center text-darkblue"
-      ><i class="fas fa-plus-square fa-3x"></i>
-      <h3 class="ml-3">Add Expenses</h3></a
-    >
-  </div>
-</div>
-{% endblock %} {% endblock %}
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, 1, 2]);
+        var options = {
+          title: "Total Expenses VS Budget",
+          isStacked: true,
+          height: 150,
+          bar: { groupWidth: "40%" },
+          legend: { position: "relative" },
+          hAxis: {
+            format: "#%",
+            minValue: 0,
+            viewWindow: { max: 1 },
+          },
+          backgroundColor: {
+            fill: "#e8e8e9",
+          },
+          series: {
+            0: { color: "#eb2d1f" },
+            1: { color: "#22b7b4" },
+          },
+        };
+        var chart = new google.visualization.BarChart(
+          document.getElementById("barchart_values")
+        );
+        chart.draw(view, options);
+      }
+    </script>
+    <title>User Dashboard</title>
+  </head>
+  <body>
+    <nav class="nav-bar padding-right">
+      <div>
+        <img
+          class="logo"
+          src="{{ url_for('static', filename='/img/logo.png') }}"
+          alt="logo"
+        />
+        <a class="text-white h3" href="/user_dashboard">Expenses Management</a>
+      </div>
+      <div class="d-flex justify-content-center align-items-center">
+        <h3 class="text-white">
+          {{one_user.first_name}} {{one_user.last_name}}
+        </h3>
+        <a class="btn bg-iron margin-left text-darkblue" href="/logout"
+          >Logout</a
+        >
+      </div>
+    </nav>
+    {% block board%}
+    <header class="header">
+      <h2 class="text-center text-darkblue">
+        YOUR OVERALL SUMMARY EXPENSES BOARD
+      </h2>
+    </header>
+    <div id="barchart_values"></div>
+    <div class="d-flex mt-5 p-5 justify-content-between">
+      <div class="bg-dark-blue text-white w-50 p-2">
+        <p class="text-center">Expenses List</p>
+        <table class="table text-center">
+          <thead>
+            <tr>
+              <th scope="col">Action</th>
+              <th scope="col">Expenses List</th>
+              <th scope="col">Date</th>
+              <th scope="col">Amount</th>
+              <th scope="col">category</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%if all_expenses %} {% for expense in all_expenses %}
+            <tr>
+              <td scope="row">
+                <a href="/edit_expense/{{expense.id}}"
+                  ><i class="fas fa-edit"></i
+                ></a>
+                <a href="/delete_expense/{{expense.id}}"
+                  ><i class="fas fa-trash-alt ml-2"></i
+                ></a>
+              </td>
+              <td>{{expense.expense}}</td>
+              <td>{{expense.date}}</td>
+              <td>{{expense.amount}}</td>
+              <td>{{expense.category}}</td>
+            </tr>
+            {% endfor %} {% endif %}
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="
+          ml-3
+          w-50
+          d-flex
+          flex-column
+          justify-content-around
+          align-items-center
+          budget-container
+        "
+      >
+        <h3 class="text-dark-brown">YOUR BUDGET</h3>
+        <div class="d-flex bg-dorado">
+          <h3 class="pl-5 pr-5 text-white">
+            <span>$</span>{% if budget == 0%}0 {%else %} {{budget.amount}}{%
+            endif %}
+          </h3>
+          <a class="square-btn bg-cement text-white" href="/new/budget">ADD</a>
+          <a
+            class="square-btn bg-orange text-white"
+            href="/edit_budget/{{budget_id}}"
+            >EDIT</a
+          >
+        </div>
+
+        <a href="/new/expense" class="d-flex align-items-center text-darkblue"
+          ><i class="fas fa-plus-square fa-3x"></i>
+          <h3 class="ml-3">Add Expenses</h3></a
+        >
+      </div>
+    </div>
+    {% endblock%}
+  </body>
+</html>

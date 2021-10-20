@@ -3,7 +3,7 @@ from werkzeug.datastructures import RequestCacheControl
 from flask_app import app
 from flask_app.models.user import User
 from flask import redirect, render_template, session, request, url_for
-from flask_app.models.buget import Budget
+from flask_app.models.budget import Budget
 
 
 @app.route('/new/budget')
@@ -31,7 +31,9 @@ def add_budget():
             "user_id": session['user_id']
 
         }
-        Budget.add_budget(data)
+        budget_id = Budget.add_budget(data)
+        session['budget_id'] = budget_id
+        print("budget id", session['budget_id'])
         return redirect('/user_dashboard')
 
 
