@@ -1,0 +1,96 @@
+{% extends 'user_dashboard.html'%}{%block board%}
+<div class="margin-top mx-auto w-50">
+  <h3 class="text-white text-center bg-dark-blue mb-0 p-1">ADD EXPENSE</h3>
+  <div
+    class="
+      d-flex
+      flex-column
+      bg-rajah
+      align-items-center
+      p-3
+      justify-content-center
+    "
+  >
+    <form
+      action="/edit_exit_expense/{{one_expense.id}}"
+      method="post"
+      class="d-flex flex-column align-items-between"
+    >
+      {% with messages = get_flashed_messages() %}{% if messages %}
+      <div class="alert alert-danger">
+        {% for message in messages %}
+        <p>{{message}}</p>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %}
+      <div class="d-flex mb-3">
+        <div class="w-25">
+          <label for="expense">Expense: </label>
+        </div>
+        <input
+          class="w-75 input-dark-brown"
+          type="text"
+          name="expense"
+          id="expense"
+          value="{{one_expense.expense}}"
+        />
+      </div>
+      <div class="d-flex mb-3">
+        <div class="w-25">
+          <label for="date">Date: </label>
+        </div>
+        <input
+          class="w-75 input-dark-brown"
+          type="date"
+          name="date"
+          id="date"
+          value="{{one_expense.date}}"
+        />
+      </div>
+      <div class="d-flex mb-3">
+        <div class="w-25">
+          <label for="category">Category:</label>
+        </div>
+        <select
+          name="category"
+          class="custom-select w-75 input-dark-brown"
+          id="category"
+        >
+          <option value="none" hidden>-- Select a Category--</option>
+          <option value="Utilities">Utilities</option>
+          <option value="Personal/Miscellaneous">Personal/Miscellaneous</option>
+          <option value="Food/Drink">Food/Drink</option>
+          <option value="Transportation">Transportation</option>
+          <option value="HouseholdItems/Supplies">
+            Household Items/Supplies
+          </option>
+          <option value="Insurance">Insurance</option>
+          <option value="Clothing">Clothing</option>
+          <option value="Medical/Healthcare">Medical/Healthcare</option>
+          <option value="Education">Education</option>
+          <option value="Gift/Donations">Gift/Donations</option>
+          <option value="Entertainment">Entertainment</option>
+        </select>
+      </div>
+      <div class="d-flex mb=3">
+        <div class="w-25">
+          <label for="amount">Amount: </label>
+        </div>
+        <input
+          class="w-75 input-dark-brown"
+          type="number"
+          name="amount"
+          id="amount"
+          step="any"
+          value="{{one_expense.amount}}"
+        />
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn bg-dark-blue mt-5 w-25 text-white">
+          EDIT
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

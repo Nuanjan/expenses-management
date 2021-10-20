@@ -33,3 +33,31 @@ def add_budget():
         }
         Budget.add_budget(data)
         return redirect('/user_dashboard')
+
+
+@app.route('/edit_budget/<int:budget_id>')
+def edit_budget(budget_id):
+    if not 'user_id' in session:
+        return render_template('forbidden.html')
+    else:
+        user_data = {
+            'id': session['user_id']
+        }
+        one_user = User.get_user_by_id(user_data)
+        data = {
+            "id": budget_id
+        }
+        budget = Budget.get_budget_with_user_id(data)
+        return render_template('edit_budget.html', budget=budget, one_user=one_user)
+
+
+@app.route('/edit_exit_budget/<int:budget_id>', methods=['POST'])
+def edit_exit_budget(budget_id):
+    if not Budget.validate_budget(request.form):
+        return redirect(f'/edit_budget/{budget_id}')
+    data = {
+        "id": budget_id,
+        "amount": request.form['amount']
+    }
+    Budget.edit_exit_budget(data)
+    return redirect('/user_dashboard')

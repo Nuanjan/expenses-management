@@ -3,6 +3,7 @@ from flask_app import app
 from flask import redirect, render_template, session, request, url_for
 from flask_app.models.buget import Budget
 from flask_app.models.user import User
+from flask_app.models.expense import Expense
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app)     # we are creating an object called bcrypt,
 
@@ -20,7 +21,6 @@ def register():
 
 @app.route('/register', methods=['POST'])
 def register_user():
-    print("t his is form request", request.form)
     if not User.validate_user(request.form):
         return redirect('/registration')
     hashed_password = bcrypt.generate_password_hash(request.form['password'])
@@ -48,12 +48,9 @@ def login_user():
     if not User.validate_login_user(validation_data):
         return redirect('/')
     elif not bcrypt.check_password_hash(user_in_db.password, request.form['password']):
-        print(bcrypt.check_password_hash(
-            user_in_db.password, request.form['password']))
         flash("Invalid user/password")
         return redirect('/')
     session['user_id'] = user_in_db.id
-    print(session['user_id'], " id from login")
     return redirect('/user_dashboard')
 
 
@@ -64,14 +61,20 @@ def user_dashboard():
             "id": session['user_id']
         }
         one_user = User.get_user_by_id(data)
-        print(one_user, " this is one user")
         one_budget = Budget.get_budget_with_user_id(data)
         if not one_budget:
             budget = 0
         else:
             budget = one_budget
-        print("one budget", budget)
-        return render_template('user_dashboard.html', one_user=one_user, budget=budget)
+        all_expenses = Expense.all_expenses_with_owner(data)
+        expenses = 0
+        if not all_expenses:
+            expenses = 0
+        else:
+            expenses = all_expenses
+            print(expenses)
+
+        return render_template('user_dashboard.html', one_user=one_user, budget=budget, expenses=expenses)
     else:
         return redirect('/forbidden')
 

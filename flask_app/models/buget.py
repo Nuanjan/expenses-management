@@ -47,3 +47,10 @@ class Budget:
             }
             one_budget.owner = user.User(user_data)
             return one_budget
+
+    @classmethod
+    def edit_exit_budget(cls, data):
+        print("data before update", data)
+        query = "UPDATE budgets SET amount = %(amount)s, updated_at = NOW() WHERE budgets.id = %(id)s"
+        return connectToMySQL(
+            'expenses_management_schema').query_db(query, data)

@@ -34,3 +34,44 @@ def add_expense():
     }
     Expense.add_expense(data)
     return redirect('/user_dashboard')
+
+
+@app.route('/edit_expense/<int:expense_id>')
+def edit_expense(expense_id):
+    if not 'user_id' in session:
+        return render_template('forbidden.html')
+    user_data = {
+        'id': session['user_id']
+    }
+    one_user = User.get_user_by_id(user_data)
+    data = {
+        "id": expense_id
+    }
+    one_expense = Expense.one_expense_with_owner(data)
+    print("one expense from db", one_expense)
+    return render_template('edit_expense.html', one_user=one_user, one_expense=one_expense)
+
+
+@app.route('/edit_exit_expense/<int:expense_id>', methods=['POST'])
+def edit_exit_expense(expense_id):
+    if not Expense.validate_expense(request.form):
+        return redirect(f'/edit_expense/{expense_id}')
+    data = {
+        "id": expense_id,
+        "expense": request.form['expense'],
+        "date": request.form['date'],
+        "amount": request.form['amount'],
+        "category": request.form['category'],
+        "user_id": session['user_id']
+    }
+    Expense.edit_exit_expense(data)
+    return redirect('/user_dashboard')
+
+
+@app.route('/delete_expense/<int:expense.id>')
+def delete_expense(expense_id):
+    data = {
+        "id": expense_id
+    }
+    Expense.delete_expense(data)
+    return redirect('/user_dashboard')
