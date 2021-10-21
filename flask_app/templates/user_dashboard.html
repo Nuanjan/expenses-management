@@ -84,13 +84,15 @@
         var options = {
           title: "Expenses Base on Category",
           pieHole: 0.4,
+
           backgroundColor: "#0b2947",
           legend: {
             textStyle: { color: 'white' }
           },
           titleTextStyle: {
             color: 'white'
-          }
+          },
+          height: 300,
         };
 
         var chart = new google.visualization.PieChart(
@@ -98,18 +100,20 @@
         );
         chart.draw(data, options);
       }
+      window.addEventListener("resize", drawChart);
     </script>
     <title>User Dashboard</title>
   </head>
   <body>
     <nav class="nav-bar padding-right">
       <div>
-        <img
-          class="logo"
-          src="{{ url_for('static', filename='/img/logo.png') }}"
-          alt="logo"
-        />
-        <a class="text-white h3" href="/user_dashboard">Expenses Management</a>
+        <a class="text-white h3" href="/user_dashboard"
+          ><img
+            class="logo"
+            src="{{ url_for('static', filename='/img/logo.png') }}"
+            alt="logo"
+          />Expenses Management</a
+        >
       </div>
       <div class="d-flex justify-content-center align-items-center">
         <h3 class="text-white">
@@ -128,7 +132,7 @@
     </header>
     <div id="barchart_values"></div>
     <div class="row mt-5 p-2 justify-content-center">
-      <div id="donutchart" class="col-lg-6"></div>
+      <div id="donutchart" class="col-lg-6 col-md-11 p-0 mt-2"></div>
       <div
         class="
           col-lg-5 col-md-11
@@ -138,6 +142,7 @@
           align-items-center
           budget-container
           bg-rajah
+          mt-2
         "
       >
         <h3 class="text-dark-brown">YOUR BUDGET</h3>
@@ -153,14 +158,30 @@
             >EDIT</a
           >
         </div>
-
+        {% with messages = get_flashed_messages() %}{% if messages %}
+        <div class="alert alert-danger">
+          {% for message in messages %}
+          <p>{{message}}</p>
+          {% endfor %}
+        </div>
+        {% endif %} {% endwith %}
         <a href="/new/expense" class="d-flex align-items-center text-darkblue"
           ><i class="fas fa-plus-square fa-3x"></i>
           <h3 class="ml-3">Add Expenses</h3></a
         >
       </div>
-      <div class="bg-my-pink text-white col-11 p-2">
-        <p class="text-center">Expenses List</p>
+      <div class="bg-dorado text-white col-md-11 mt-2 p-0">
+        <div class="d-flex justify-content-center p-2">
+          <label class="mr-2"> Expenses Date From: </label>
+          <input type="date" />
+          <label class="mr-2 ml-2"> To: </label>
+          <input type="date" />
+          <a
+            class="btn bg-iron margin-left text-darkblue"
+            href="/expenses/list/date"
+            >Submit</a
+          >
+        </div>
         <table class="table text-center">
           <thead>
             <tr>
