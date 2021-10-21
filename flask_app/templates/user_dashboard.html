@@ -24,7 +24,7 @@
       src="https://www.gstatic.com/charts/loader.js"
     ></script>
     <script type="text/javascript">
-      google.charts.load("current", { packages: ["corechart"] });
+      google.charts.load("visualization", "1", { packages: ["corechart"] });
       google.charts.setOnLoadCallback(drawChart);
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
@@ -58,6 +58,39 @@
         );
         chart.draw(view, options);
       }
+      window.addEventListener("resize", drawChart);
+    </script>
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+    <script type="text/javascript">
+      google.charts.load("current", { packages: ["corechart"] });
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ["Task", "Hours per Day"],
+         {% for total in data %}
+           {% for key, value in total.items() %}
+            {% if value is string %}
+             ['{{ key }}', '{{ value }}'],
+            {% else %}
+             ['{{ key }}', {{ value }}],
+            {% endif %}
+           {% endfor %}
+         {% endfor %}
+        ]);
+
+        var options = {
+          title: "Expenses Base on Category",
+          pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(
+          document.getElementById("donutchart")
+        );
+        chart.draw(data, options);
+      }
     </script>
     <title>User Dashboard</title>
   </head>
@@ -87,8 +120,39 @@
       </h2>
     </header>
     <div id="barchart_values"></div>
-    <div class="d-flex mt-5 p-5 justify-content-between">
-      <div class="bg-dark-blue text-white w-50 p-2">
+    <div class="row mt-5 p-2 justify-content-center">
+      <div id="donutchart" class="col-lg-6"></div>
+      <div
+        class="
+          col-lg-5 col-md-11
+          d-flex
+          flex-column
+          justify-content-around
+          align-items-center
+          budget-container
+          bg-rajah
+        "
+      >
+        <h3 class="text-dark-brown">YOUR BUDGET</h3>
+        <div class="d-flex bg-dorado">
+          <h3 class="pl-5 pr-5 text-white">
+            <span>$</span>{% if budget == 0%}0 {%else %} {{budget.amount}}{%
+            endif %}
+          </h3>
+          <a class="square-btn bg-cement text-white" href="/new/budget">ADD</a>
+          <a
+            class="square-btn bg-orange text-white"
+            href="/edit_budget/{{budget_id}}"
+            >EDIT</a
+          >
+        </div>
+
+        <a href="/new/expense" class="d-flex align-items-center text-darkblue"
+          ><i class="fas fa-plus-square fa-3x"></i>
+          <h3 class="ml-3">Add Expenses</h3></a
+        >
+      </div>
+      <div class="bg-dark-blue text-white col-11 p-2">
         <p class="text-center">Expenses List</p>
         <table class="table text-center">
           <thead>
@@ -119,36 +183,6 @@
             {% endfor %} {% endif %}
           </tbody>
         </table>
-      </div>
-      <div
-        class="
-          ml-3
-          w-50
-          d-flex
-          flex-column
-          justify-content-around
-          align-items-center
-          budget-container
-        "
-      >
-        <h3 class="text-dark-brown">YOUR BUDGET</h3>
-        <div class="d-flex bg-dorado">
-          <h3 class="pl-5 pr-5 text-white">
-            <span>$</span>{% if budget == 0%}0 {%else %} {{budget.amount}}{%
-            endif %}
-          </h3>
-          <a class="square-btn bg-cement text-white" href="/new/budget">ADD</a>
-          <a
-            class="square-btn bg-orange text-white"
-            href="/edit_budget/{{budget_id}}"
-            >EDIT</a
-          >
-        </div>
-
-        <a href="/new/expense" class="d-flex align-items-center text-darkblue"
-          ><i class="fas fa-plus-square fa-3x"></i>
-          <h3 class="ml-3">Add Expenses</h3></a
-        >
       </div>
     </div>
     {% endblock%}

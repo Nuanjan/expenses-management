@@ -73,7 +73,12 @@ def user_dashboard():
             total_expenses = 0.00
         else:
             total_expenses = summary['total_expenses']/summary['budget']
-        return render_template('user_dashboard.html', one_user=one_user, budget=budget, budget_id=session['budget_id'], all_expenses=all_expenses, total_expenses=total_expenses)
+        total = Expense.get_total_base_on_category()
+        data = []
+        for tol in total:
+            data.append({tol['category']: tol['total']})
+        print("data after map", data)
+        return render_template('user_dashboard.html', one_user=one_user, budget=budget, budget_id=session['budget_id'], all_expenses=all_expenses, total_expenses=total_expenses, data=data)
     else:
         return redirect('/forbidden')
 

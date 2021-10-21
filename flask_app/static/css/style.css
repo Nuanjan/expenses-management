@@ -121,7 +121,6 @@ select {
 }
 .budget-container {
   height: 300px;
-  background-color: var(--rajah);
 }
 .add-budget-container {
   height: 250px;

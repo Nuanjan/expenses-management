@@ -123,3 +123,17 @@ class Expense:
                 "budget": float(results[0]['amount'])
             }
         return data
+
+    @classmethod
+    def get_total_base_on_category(cls):
+        query = "SELECT SUM(expenses.amount) as total, expenses.category FROM expenses GROUP BY expenses.category;"
+        results = connectToMySQL('expenses_management_schema').query_db(query)
+        category_list = []
+        data = {}
+        for row in results:
+            data = {
+                "total": float(row['total']),
+                "category": row['category']
+            }
+            category_list.append(data)
+        return category_list
