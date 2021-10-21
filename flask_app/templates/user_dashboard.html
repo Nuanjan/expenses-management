@@ -171,17 +171,17 @@
         >
       </div>
       <div class="bg-dorado text-white col-md-11 mt-2 p-0">
-        <div class="d-flex justify-content-center p-2">
+        <form
+          action="/expenses/list/date"
+          method="post"
+          class="d-flex justify-content-center p-2"
+        >
           <label class="mr-2"> Expenses Date From: </label>
-          <input type="date" />
+          <input type="date" name="start_date" />
           <label class="mr-2 ml-2"> To: </label>
-          <input type="date" />
-          <a
-            class="btn bg-iron margin-left text-darkblue"
-            href="/expenses/list/date"
-            >Submit</a
-          >
-        </div>
+          <input type="date" name="end_date" />
+          <button type="submit" class="btn bg-iron">Submit</button>
+        </form>
         <table class="table text-center">
           <thead>
             <tr>

@@ -3,6 +3,7 @@ from werkzeug.datastructures import RequestCacheControl
 from flask_app import app
 from flask_app.models.expense import Expense
 from flask_app.models.user import User
+from flask_app.models.budget import Budget
 from flask import redirect, render_template, session, request, url_for
 
 
@@ -19,10 +20,8 @@ def new_expense():
 
 @app.route('/add_expense', methods=['POST'])
 def add_expense():
-    print("budget_id", session['budget_id'])
     if not 'user_id' in session:
         return render_template('forbidden.html')
-    print("expense form data", request.form)
     if not Expense.validate_expense(request.form):
         return redirect('/new/expense')
     if not 'budget_id' in session:
@@ -57,7 +56,6 @@ def edit_expense(expense_id):
         "id": expense_id
     }
     one_expense = Expense.one_expense_with_owner_and_budget(data)
-    print("one expense from db", one_expense)
     return render_template('edit_expense.html', one_user=one_user, one_expense=one_expense)
 
 
@@ -65,7 +63,6 @@ def edit_expense(expense_id):
 def edit_exit_expense(expense_id):
     if not Expense.validate_expense(request.form):
         return redirect(f'/edit_expense/{expense_id}')
-    print("budget id in expenses controller ", session['budget_id'])
     data = {
         "id": expense_id,
         "expense": request.form['expense'],
@@ -86,4 +83,13 @@ def delete_expense(expense_id):
         "id": expense_id
     }
     Expense.delete_expense(data)
+    return redirect('/user_dashboard')
+
+
+@app.route('/expenses/list/date', methods=['POST'])
+def all_expenses_with_date():
+    if not 'start_date' in session:
+        session['start_date'] = request.form['start_date']
+    if not 'end_date' in session:
+        session['end_date'] = request.form['end_date']
     return redirect('/user_dashboard')

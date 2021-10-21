@@ -19,8 +19,6 @@ def new_budget():
 
 @app.route('/add_budget', methods=['POST'])
 def add_budget():
-    print('form request', request.form)
-    print('user_id', session['user_id'])
     if not 'user_id' in session:
         return render_template('forbidden.html')
     else:
@@ -33,7 +31,6 @@ def add_budget():
         }
         budget_id = Budget.add_budget(data)
         session['budget_id'] = budget_id
-        print("budget id", session['budget_id'])
         return redirect('/user_dashboard')
 
 

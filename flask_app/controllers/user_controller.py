@@ -66,8 +66,17 @@ def user_dashboard():
             session['budget_id'] = 0
         else:
             session['budget_id'] = budget.id
-        all_expenses = Expense.all_expenses_with_owner_and_budget(data)
-        print("this is all expense list", all_expenses)
+
+        if 'start_date' in session:
+            date_data = {
+                "start_date": session['start_date'],
+                "end_date": session['end_date']
+            }
+            all_expenses = Expense.all_expenses_with_date(date_data)
+            session.pop('start_date', None)
+            session.pop('end_date', None)
+        else:
+            all_expenses = Expense.all_expenses_with_owner_and_budget(data)
         summary = Expense.get_budget_and_expense(data)
         total_expenses = 0.00
         if not summary:
@@ -75,11 +84,9 @@ def user_dashboard():
         else:
             total_expenses = summary['total_expenses']/summary['budget']
         total = Expense.get_total_base_on_category(data)
-        print("total", total)
         data = []
         for tol in total:
             data.append({tol['category']: tol['total']})
-        print(data)
         return render_template('user_dashboard.html', one_user=one_user, budget=budget, budget_id=session['budget_id'], all_expenses=all_expenses, total_expenses=total_expenses, data=data)
     else:
         return redirect('/forbidden')

@@ -23,7 +23,6 @@ class Budget:
 
     @classmethod
     def add_budget(cls, data):
-        print(" data before add into budget", data)
         query = "INSERT INTO budgets (amount, created_at, updated_at, user_id) VALUES(%(amount)s, NOW(), NOW(), %(user_id)s)"
         return connectToMySQL('expenses_management_schema').query_db(query, data)
 
@@ -50,7 +49,6 @@ class Budget:
 
     @classmethod
     def edit_exit_budget(cls, data):
-        print("data before update", data)
         query = "UPDATE budgets SET amount = %(amount)s, updated_at = NOW() WHERE budgets.id = %(id)s"
         return connectToMySQL(
             'expenses_management_schema').query_db(query, data)

@@ -138,3 +138,36 @@ class Expense:
             }
             category_list.append(data)
         return category_list
+
+    @classmethod
+    def all_expenses_with_date(cls, data):
+        query = "SELECT * FROM expenses JOIN users ON users.id = expenses.user_id JOIN budgets ON expenses.budget_id = budgets.id WHERE expenses.date BETWEEN %(start_date)s AND %(end_date)s;"
+        results = connectToMySQL(
+            'expenses_management_schema').query_db(query, data)
+        all_expenses = []
+
+        if len(results) < 1:
+            return False
+        else:
+            for row in results:
+                one_expense = cls(row)
+                user_data = {
+                    "id": row['users.id'],
+                    "first_name": row['first_name'],
+                    "last_name": row['last_name'],
+                    "email": row['email'],
+                    "password": row['password'],
+                    "created_at": row['users.created_at'],
+                    "updated_at": row['users.updated_at']
+                }
+                budget_data = {
+                    "id": row['budgets.id'],
+                    "amount": row['budgets.amount'],
+                    "created_at": row['budgets.created_at'],
+                    "updated_at": row['budgets.updated_at']
+                }
+
+                one_expense.owner = user.User(user_data)
+                one_expense.budget = budget.Budget(budget_data)
+                all_expenses.append(one_expense)
+            return all_expenses

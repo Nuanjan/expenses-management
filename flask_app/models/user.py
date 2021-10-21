@@ -65,14 +65,14 @@ class User:
 
     @classmethod
     def add_user(cls, data):
-        print('data from queries: ', data)
         query = "INSERT INTO users (first_name , last_name , email ,password, created_at, updated_at ) VALUES ( %(first_name)s , %(last_name)s , %(email)s ,%(password)s, NOW() , NOW());"
         return connectToMySQL('expenses_management_schema').query_db(query, data)
 
     @classmethod
     def get_user_by_email(cls, data):
         query = "SELECT * FROM users WHERE email = %(email)s"
-        result = connectToMySQL('expenses_management_schema').query_db(query, data)
+        result = connectToMySQL(
+            'expenses_management_schema').query_db(query, data)
         if len(result) < 1:
             return False
         return cls(result[0])
@@ -80,8 +80,8 @@ class User:
     @classmethod
     def get_user_by_id(cls, data):
         query = "SELECT * FROM users WHERE users.id = %(id)s"
-        result = connectToMySQL('expenses_management_schema').query_db(query, data)
+        result = connectToMySQL(
+            'expenses_management_schema').query_db(query, data)
         if len(result) < 1:
             return False
         return cls(result[0])
-    
