@@ -69,7 +69,7 @@
       google.charts.setOnLoadCallback(drawChart);
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
-          ["Task", "Hours per Day"],
+          ["Category", "Money per Category"],
          {% for total in data %}
            {% for key, value in total.items() %}
             {% if value is string %}
@@ -84,6 +84,13 @@
         var options = {
           title: "Expenses Base on Category",
           pieHole: 0.4,
+          backgroundColor: "#0b2947",
+          legend: {
+            textStyle: { color: 'white' }
+          },
+          titleTextStyle: {
+            color: 'white'
+          }
         };
 
         var chart = new google.visualization.PieChart(
@@ -152,7 +159,7 @@
           <h3 class="ml-3">Add Expenses</h3></a
         >
       </div>
-      <div class="bg-dark-blue text-white col-11 p-2">
+      <div class="bg-my-pink text-white col-11 p-2">
         <p class="text-center">Expenses List</p>
         <table class="table text-center">
           <thead>

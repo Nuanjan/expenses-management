@@ -125,9 +125,10 @@ class Expense:
         return data
 
     @classmethod
-    def get_total_base_on_category(cls):
-        query = "SELECT SUM(expenses.amount) as total, expenses.category FROM expenses GROUP BY expenses.category;"
-        results = connectToMySQL('expenses_management_schema').query_db(query)
+    def get_total_base_on_category(cls, data):
+        query = "SELECT COALESCE(SUM(expenses.amount),0) as total, expenses.category FROM expenses JOIN users ON users.id = expenses.user_id WHERE users.id=%(id)s GROUP BY expenses.category;"
+        results = connectToMySQL(
+            'expenses_management_schema').query_db(query, data)
         category_list = []
         data = {}
         for row in results:

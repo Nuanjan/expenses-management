@@ -66,6 +66,9 @@
 .bg-rajah {
   background-color: var(--rajah);
 }
+.bg-my-pink {
+  background-color: var(--my-pink);
+}
 /* --------------------NAV BAR Rules------------- */
 .nav-bar {
   height: 100px;
