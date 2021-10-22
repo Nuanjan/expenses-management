@@ -15,7 +15,10 @@ Welcom to Expenses Management web application. This application will help you tr
 - As a User, I can select the period of time to see the total that I spend on my expenses based on the category, So I can determine what category I should stop spending money with.
 - As a user I can see my 10th last expenses list on my board, so I can see my updated list.
 
-## Important Link:
+## Helpful Link:
+
+![Google Chart](https://developers.google.com/chart)
+![Google](https://developers.google.com/identity/protocols/oauth2)
 
 ## Technologies Used:
 
@@ -47,6 +50,7 @@ Welcom to Expenses Management web application. This application will help you tr
 
 - As a user, I can link my bank account data into the app, So I don't need to manually add expenses into my list.
 - as a user, I can create many monthly budget, So I can see all of my expenses from the monthly budget.
+- As a user, I can use my app in public deploy, so I can use my app everywhere.
 
 ## images
 
