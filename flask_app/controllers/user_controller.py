@@ -4,7 +4,26 @@ from flask import redirect, render_template, session, request, url_for
 from flask_app.models.budget import Budget
 from flask_app.models.user import User
 from flask_app.models.expense import Expense
+from google.oauth2 import id_token
+from google_auth_oauthlib.flow import Flow
+from pip._vendor import cachecontrol
+import google.auth.transport.requests
+import requests
+import os
+import pathlib
 from flask_bcrypt import Bcrypt
+from dotenv import load_dotenv
+
+
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
+client_secrets_file = os.path.join(
+    pathlib.Path(__file__).parent, "client_secret.json")
+flow = Flow.from_client_secrets_file(
+    client_secrets_file=client_secrets_file,
+    scopes=["https://www.googleapis.com/auth/userinfo.profile",
+            "https://www.googleapis.com/auth/userinfo.email", "openid"],
+    redirect_uri="http://localhost:5000/callback")
 bcrypt = Bcrypt(app)     # we are creating an object called bcrypt,
 
 
@@ -12,6 +31,39 @@ bcrypt = Bcrypt(app)     # we are creating an object called bcrypt,
 def index():
     data = {'budget': 1, 'expenses': 0.1}
     return render_template('index.html')
+
+
+@app.route('/google_login')
+def google_login():
+    authorization_url, state = flow.authorization_url()
+    session['state'] = state
+    print(" this is session state", session['state'])
+    return redirect(authorization_url)
+
+
+@app.route("/callback")
+def callback():
+    flow.fetch_token(authorization_response=request.url)
+    if 'state' in session:
+        if not session["state"] == request.args["state"]:
+            return redirect('/forbidden')
+
+    credentials = flow.credentials
+    request_session = requests.session()
+    cached_session = cachecontrol.CacheControl(request_session)
+    token_request = google.auth.transport.requests.Request(
+        session=cached_session)
+
+    id_info = id_token.verify_oauth2_token(
+        id_token=credentials._id_token,
+        request=token_request,
+        audience=GOOGLE_CLIENT_ID
+    )
+    session['e_mail'] = id_info.get("email")
+    session['first_name'] = id_info.get("given_name")
+    session['last_name'] = id_info.get("family_name")
+    session['user_id'] = id_info.get("sub")
+    return redirect('/user_dashboard')
 
 
 @app.route('/registration')

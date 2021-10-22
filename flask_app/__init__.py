@@ -1,3 +1,6 @@
 from flask import Flask
 app = Flask(__name__)
-app.secret_key = "dhgdu23565fjlfmd1245ggkfokg225"
+import os
+from dotenv import load_dotenv
+
+app.secret_key = os.getenv('SECRET_KEY')
